@@ -23,7 +23,10 @@ function Msg
 
 function Success([string]$str) 
 {
-    Msg -symbol "[✓]" -str $str -color "Green"
+    if ($? -eq $true)
+    {
+        Msg -symbol "[✓]" -str $str -color "Green"
+    }
 }
 
 function Error([string]$str)
@@ -137,29 +140,31 @@ function MakeDotSpacevim
 {
     if (-not (Test-Path $DOTSPACEVIM))
     {
-        $text ="`" You can enable the existing layers in space-vim and`n"`
-            + "`" exclude the partial plugins in a certain layer.`n"`
-            + "`" The command Layer and Exlcude are vaild in the function Layers().`n"`
-            + "function! Layers()`n"`
-            + "    `" Default layers, recommended!`n"`
-            + "    Layer 'fzf'`n"`
-            + "    Layer 'unite'`n"`
-            + "    Layer 'better-defaults'`n"`
-            + "endfunction`n"`
-            + "`" Put your private plugins here.`n"`
-            + "function! UserInit()`n"`
-            + "    `" Space has been set as the default leader key,`n"`
-            + "    `" if you want to change it, uncomment and set it here.`n"`
-            + "    `" let g:spacevim_leader = `"<\Space>`"`n"`
-            + "    `" let g:spacevim_localleader = ','`n"`
-            + "    `" Install private plugins`n"`
-            + "    `" Plug 'extr0py/oni'`n"`
-            + "endfunction`n"`
-            + "`" Put your costom configurations here, e.g., change the colorscheme.`n"`
-            + "function! UserConfig()`n"`
-            + "    `" If you enable airline layer and have installed the powerline fonts, set it here.`n"`
-            + "    `" let g:airline_powerline_fonts=1`n"`
-            + "    `" color desert"
+        $text =@"
+" You can enable the existing layers in space-vim and
+" exclude the partial plugins in a certain layer.
+" The command Layer and Exlcude are vaild in the function Layers().
+function! Layers()
+    " Default layers, recommended!
+    Layer 'fzf'
+    Layer 'unite'
+    Layer 'better-defaults'
+endfunction
+" Put your private plugins here.
+function! UserInit()
+    " Space has been set as the default leader key,
+    " if you want to change it, uncomment and set it here.
+    " let g:spacevim_leader = "<\Space>"
+    " let g:spacevim_localleader = ','
+    " Install private plugins
+    " Plug 'extr0py/oni'
+endfunction
+" Put your costom configurations here, e.g., change the colorscheme.
+function! UserConfig()
+    " If you enable airline layer and have installed the powerline fonts, set it here.
+    " let g:airline_powerline_fonts=1
+    " color desert
+"@
         Set-Content -Path $DOTSPACEVIM -Value $text
     }
 }
@@ -181,3 +186,7 @@ SetupVimplug
 
 Write-Host "Thanks for installing " -NoNewline
 Msg -symbol $APP_NAME -str ". Enjoy!" -color "Red"
+
+Write-Host "Press any key to exit ..."
+$x = $host.UI.RawUI.ReadKey("")
+exit
