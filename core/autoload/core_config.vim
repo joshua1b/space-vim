@@ -104,7 +104,11 @@ function! core_config#begin()
         call s:check_vim_plug(l:vim_plug_path)
     endif
 
-    let s:vim_home = $HOME.'/.vim/'
+    if !g:WINDOWS
+    	let s:vim_home = $HOME.'/.vim/'
+    else
+    	let s:vim_home = $HOME.'/vimfiles/'
+    endif
 
     if !exists('g:my_plug_home')
         if g:spacevim_nvim
